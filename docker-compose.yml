@@ -1,35 +1,21 @@
 services:
-  # MySQL Database Service
   mysql:
     image: mysql:8.0
     container_name: avivo-mysql
-    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: avivo_users
-      MYSQL_USER: avivo_user
-      MYSQL_PASSWORD: avivo_password
     ports:
       - "3306:3306"
     volumes:
       - ./sql-data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - avivo-network
 
-  # Node.js API Service
   api:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: avivo-api
-    restart: unless-stopped
     environment:
-      NODE_ENV: production
       PORT: 3000
       DB_HOST: mysql
       DB_PORT: 3306
@@ -39,14 +25,8 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      mysql:
-        condition: service_healthy
-    networks:
-      - avivo-network
-    # Run seed script first, then start server (sequential execution - server waits for seed to complete)
+      - mysql
     command: sh -c "npm run seed; node dist/server.js"
 
 networks:
-  avivo-network:
-    driver: bridge
-
+  default:

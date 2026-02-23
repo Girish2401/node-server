@@ -36,14 +36,13 @@ async function startServer(): Promise<void> {
     const dbConnected = await testConnection();
     
     if (!dbConnected) {
-      console.error('⚠️  Warning: Database connection failed. Server will start but API may not work.');
-      console.log('💡 Make sure MySQL is running and environment variables are set correctly.');
+      console.error('Warning: Database connection failed. Server will start but API may not work.');
+      console.log('Make sure MySQL is running and environment variables are set correctly.');
     }
 
     app.listen(PORT, () => {
-      console.log(`🚀 Server is running on port ${PORT}`);
-      console.log(`📍 Users API: http://localhost:${PORT}/users`);
-      console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`Server is running on port ${PORT}`);
+      console.log(`Environment: development`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);

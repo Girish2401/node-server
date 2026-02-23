@@ -1,4 +1,4 @@
-import { pool } from '../config/database';
+import { connection } from '../config/database';
 
 export interface Hair {
   color: string;
@@ -81,10 +81,10 @@ export class UserModel {
    */
   static async getAll(): Promise<User[]> {
     try {
-      const [rows] = await pool.execute(
+      const [rows] = await connection.execute(
         'SELECT * FROM users ORDER BY id ASC'
       );
-      // Parse JSON fields from database
+      
       // MySQL JSON columns may be returned as objects or strings depending on driver version
       const parseJsonField = (field: any): any => {
         if (!field) return null;
