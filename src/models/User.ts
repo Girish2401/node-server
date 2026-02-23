@@ -1,4 +1,4 @@
-import { connection } from '../config/database';
+import { getConnection } from '../config/database';
 
 export interface Hair {
   color: string;
@@ -81,6 +81,7 @@ export class UserModel {
    */
   static async getAll(): Promise<User[]> {
     try {
+      const connection = await getConnection();
       const [rows] = await connection.execute(
         'SELECT * FROM users ORDER BY id ASC'
       );
